@@ -42,7 +42,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 @Configuration
 public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
 
-    private final Logger logger = LoggerFactory.getLogger(WebMvcConfigurer.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(WebMvcConfigurer.class);
     @Value("${spring.profiles.active}")
     private String env;//当前激活的配置文件
 
@@ -71,7 +71,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
                 Result result = new Result();
                 if (e instanceof ServiceException) {//业务失败的异常，如“账号或密码错误”
                     result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
-                    logger.info(e.getMessage());
+                    LOGGER.info(e.getMessage());
                 } else if (e instanceof NoHandlerFoundException) {
                     result.setCode(ResultCode.NOT_FOUND).setMessage("接口 [" + request.getRequestURI() + "] 不存在");
                 } else if (e instanceof ServletException) {
@@ -89,7 +89,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
                     } else {
                         message = e.getMessage();
                     }
-                    logger.error(message, e);
+                    LOGGER.error(message, e);
                 }
                 responseResult(response, result);
                 return new ModelAndView();
@@ -117,7 +117,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
                     if (pass) {
                         return true;
                     } else {
-                        logger.warn("签名认证失败，请求接口：{}，请求IP：{}，请求参数：{}",
+                        LOGGER.warn("签名认证失败，请求接口：{}，请求IP：{}，请求参数：{}",
                                 request.getRequestURI(), getIpAddress(request), JSON.toJSONString(request.getParameterMap()));
 
                         Result result = new Result();
@@ -137,7 +137,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
         try {
             response.getWriter().write(JSON.toJSONString(result));
         } catch (IOException ex) {
-            logger.error(ex.getMessage());
+            LOGGER.error(ex.getMessage());
         }
     }
 
